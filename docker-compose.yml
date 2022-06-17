@@ -1,4 +1,5 @@
-version: '2'
+version: '3'
+
 services:
     rabbit:
         hostname: rabbit
@@ -8,11 +9,10 @@ services:
             - RABBITMQ_DEFAULT_PASS=mypass
         ports:
             - "5673:5672"
-
     worker:
         build:
             context: .
-            dockerfile: dockerfile
+            dockerfile: Dockerfile
         volumes:
             - .:/app
         links:
@@ -22,5 +22,10 @@ services:
     database:
         hostname: mongo
         image: mongo:latest
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: admin
+            MONGO_INITDB_DATABASE: crawl
         ports:
             - "27018:27017"
